@@ -1,0 +1,2 @@
+-- This compatibility migration fills schema objects owned by the initial
+-- migration. Leave rollback as a no-op to avoid dropping shared data.

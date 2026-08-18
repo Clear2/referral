@@ -1,0 +1,1 @@
+-- Compatibility marker for the schema version already deployed to production.

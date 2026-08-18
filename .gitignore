@@ -1,0 +1,16 @@
+.DS_Store
+.idea/
+.gstack/
+
+backend/config.yaml
+backend/coverage.txt
+deploy/config.production.yaml
+deploy/nginx/*.key
+deploy/nginx/*.pem
+
+frontend/node_modules/
+frontend/**/build/
+frontend/.react-router/
+frontend/test-results/
+frontend/playwright-report/
+frontend/*.tsbuildinfo

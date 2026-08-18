@@ -1,0 +1,4 @@
+interface:
+  display_name: "Referral Code Review"
+  short_description: "Review Referral changes for correctness and release risk"
+  default_prompt: "Use $referral-code-review to review the current Referral changes and report actionable findings."

@@ -1,0 +1,21 @@
+[Unit]
+Description=Keeper backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=keeper
+Group=keeper
+WorkingDirectory=/opt/keep-2026/current/backend
+Environment=CONFIG_PATH=/opt/keep-2026/shared/config.yaml
+Environment=GOMAXPROCS=2
+ExecStart=/opt/keep-2026/current/backend/keeper
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=30
+KillSignal=SIGTERM
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

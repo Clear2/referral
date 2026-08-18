@@ -1,0 +1,4 @@
+interface:
+  display_name: "Referral Feature"
+  short_description: "Implement Referral features safely across backend and frontend"
+  default_prompt: "Use $referral-feature to implement this Referral product change end to end."

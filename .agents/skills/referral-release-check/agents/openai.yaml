@@ -1,0 +1,4 @@
+interface:
+  display_name: "Referral Release Check"
+  short_description: "Verify backend, web, admin, routing, and deployment readiness"
+  default_prompt: "Use $referral-release-check to verify this Referral change before release."

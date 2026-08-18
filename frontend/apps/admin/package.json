@@ -1,0 +1,10 @@
+{
+  "name": "@referral/admin",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "react-router dev --port 5174", "build": "react-router build", "typecheck": "react-router typegen && tsc" },
+  "dependencies": {
+    "@referral/api": "workspace:*", "@referral/i18n": "workspace:*", "@referral/ui": "workspace:*", "@react-router/node": "7.15.1", "isbot": "^5", "lucide-react": "^1.31.0", "react": "^19.2.6", "react-dom": "^19.2.6", "react-router": "7.15.1"
+  },
+  "devDependencies": { "@react-router/dev": "7.15.1", "@tailwindcss/vite": "^4", "@types/node": "^22", "@types/react": "^19", "@types/react-dom": "^19", "typescript": "^6", "vite": "^8" }
+}

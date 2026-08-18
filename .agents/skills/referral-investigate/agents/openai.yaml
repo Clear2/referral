@@ -1,0 +1,4 @@
+interface:
+  display_name: "Referral Investigate"
+  short_description: "Diagnose auth, referral, Credit, and RBAC defects"
+  default_prompt: "Use $referral-investigate to reproduce and diagnose this Referral system defect."

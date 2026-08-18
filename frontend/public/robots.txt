@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /ref/
+Disallow: /admin/
+
+Sitemap: https://referral.vivl.cc/sitemap.xml

@@ -1,0 +1,2 @@
+-- The original production baseline predates the checked-in migration history.
+-- Deliberately leave rollback as a no-op rather than dropping existing data.

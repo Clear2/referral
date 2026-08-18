@@ -1,0 +1,8 @@
+{
+  "name": "@referral/i18n",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.tsx" },
+  "peerDependencies": { "react": "^19.0.0" },
+  "devDependencies": { "@types/react": "^19" }
+}
