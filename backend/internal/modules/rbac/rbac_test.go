@@ -197,6 +197,40 @@ func TestSyncAPIIsIdempotentAndRefreshesRouteMetadata(t *testing.T) {
 	}
 }
 
+func TestAPIRouteNameRemovesGoHandlerDetails(t *testing.T) {
+	tests := map[string]string{
+		"github.com/keep/sunny/internal/modules/rbac.(*Controller).MyAccess-fm": "My Access",
+		"github.com/keep/sunny/internal/router.NewRouter.func1":                 "GET /api/v1/healthz",
+	}
+	for handler, want := range tests {
+		if got := apiRouteName(handler, "GET", "/api/v1/healthz"); got != want {
+			t.Errorf("apiRouteName(%q) = %q, want %q", handler, got, want)
+		}
+	}
+}
+
+func TestNormalizeLegacyAPINames(t *testing.T) {
+	_, repository := testService(t)
+	legacy, err := repository.client.APIResource.Create().
+		SetName("github.com/example.(*Controller).Old-fm").
+		SetMethod("GET").
+		SetPath("/api/v1/old").
+		Save(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := repository.NormalizeLegacyAPINames(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	updated, err := repository.client.APIResource.Get(context.Background(), legacy.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if updated.Name != "GET /api/v1/old" {
+		t.Fatalf("legacy API name = %q, want route label", updated.Name)
+	}
+}
+
 func TestAllowedResourceUsesPermissionAPIMap(t *testing.T) {
 	service, repository := testService(t)
 	api, err := repository.client.APIResource.Create().SetName("Users list").SetMethod("GET").SetPath("/api/v1/admin/users").Save(context.Background())

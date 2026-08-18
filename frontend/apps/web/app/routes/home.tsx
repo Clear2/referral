@@ -358,18 +358,12 @@ export default function ReferralHome() {
           </div>
           <div className="invite-summary" aria-label="邀请概览">
             <div>
-              <Users size={17} />
-              <span>
-                <strong>{summary?.successfulReferrals ?? "--"}</strong>
-                <small>成功邀请</small>
-              </span>
+              <strong>{summary?.successfulReferrals ?? "--"}</strong>
+              <small>成功邀请</small>
             </div>
             <div>
-              <Gift size={17} />
-              <span>
-                <strong>{summary?.totalCreditsEarned ?? "--"}</strong>
-                <small>累计 Credit</small>
-              </span>
+              <strong>{summary?.totalCreditsEarned ?? "--"}</strong>
+              <small>累计 Credit</small>
             </div>
           </div>
           {dataError && (
@@ -428,12 +422,16 @@ export default function ReferralHome() {
               type="button"
               disabled={!userID || historyRefreshing}
               onClick={() => userID && void refreshDashboard(userID)}
+              aria-label={
+                historyRefreshing ? "正在刷新邀请记录" : "刷新邀请记录"
+              }
+              title={historyRefreshing ? "正在刷新邀请记录" : "刷新邀请记录"}
             >
               <RefreshCw
                 className={historyRefreshing ? "spin" : ""}
                 size={15}
               />
-              {historyRefreshing ? "刷新中…" : "刷新记录"}
+              <span>{historyRefreshing ? "刷新中…" : "刷新记录"}</span>
             </button>
           </div>
           {!summary ? (

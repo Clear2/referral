@@ -2,6 +2,7 @@ package rbac
 
 import (
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -11,6 +12,8 @@ import (
 	"github.com/keep/sunny/pkg/response"
 	"github.com/keep/sunny/pkg/utils"
 )
+
+var handlerWordBoundary = regexp.MustCompile(`([a-z0-9])([A-Z])`)
 
 type Controller struct {
 	service *Service
@@ -204,13 +207,31 @@ func (ctl *Controller) SyncAPIs(c *gin.Context) {
 		if strings.HasPrefix(route.Path, "/swagger/") {
 			continue
 		}
-		in := APIInput{Name: route.Handler, Method: route.Method, Path: route.Path, Enabled: boolPointer(true)}
+		in := APIInput{Name: apiRouteName(route.Handler, route.Method, route.Path), Method: route.Method, Path: route.Path, Enabled: boolPointer(true)}
 		if err := ctl.service.repo.SyncAPI(c.Request.Context(), in); err != nil {
 			ctl.audited(c, publicError(err), "SYNC", "API", 0)
 			return
 		}
 	}
+	if err := ctl.service.repo.NormalizeLegacyAPINames(c.Request.Context()); err != nil {
+		ctl.audited(c, publicError(err), "SYNC", "API", 0)
+		return
+	}
 	ctl.audited(c, nil, "SYNC", "API", 0)
+}
+
+func apiRouteName(handler, method, path string) string {
+	name := strings.TrimSuffix(handler, "-fm")
+	if index := strings.LastIndex(name, ")."); index >= 0 {
+		name = name[index+2:]
+	} else if index := strings.LastIndex(name, "."); index >= 0 {
+		name = name[index+1:]
+	}
+	name = handlerWordBoundary.ReplaceAllString(name, "$1 $2")
+	if name == "" || strings.HasPrefix(name, "func") {
+		return method + " " + path
+	}
+	return strings.TrimSpace(name)
 }
 func boolPointer(value bool) *bool { return &value }
 func (ctl *Controller) MyAccess(c *gin.Context) {

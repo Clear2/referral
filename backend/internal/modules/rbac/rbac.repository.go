@@ -3,6 +3,7 @@ package rbac
 import (
 	"context"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/keep/sunny/ent"
@@ -200,6 +201,21 @@ func (r *Repository) SyncAPI(ctx context.Context, in APIInput) error {
 		return err
 	}
 	return r.client.APIResource.UpdateOne(existing).SetName(in.Name).SetEnabled(true).Exec(ctx)
+}
+func (r *Repository) NormalizeLegacyAPINames(ctx context.Context) error {
+	items, err := r.client.APIResource.Query().All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, item := range items {
+		if !strings.Contains(item.Name, "github.com/") && !strings.HasSuffix(item.Name, "-fm") {
+			continue
+		}
+		if err := item.Update().SetName(item.Method + " " + item.Path).Exec(ctx); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 func (r *Repository) Audit(ctx context.Context, operatorID int, action, target string, targetID int, requestID, ip string) error {
 	return r.client.PermissionAuditLog.Create().SetOperatorID(operatorID).SetAction(action).SetTargetType(target).SetTargetID(targetID).SetRequestID(requestID).SetIPAddress(ip).Exec(ctx)

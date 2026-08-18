@@ -10,7 +10,7 @@ import {
   Search,
   Users,
 } from "lucide-react"
-import { Link, useNavigate, useSearchParams } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
 
 import { apiRequest } from "@referral/api"
 import { getLocale } from "@referral/i18n"
@@ -146,15 +146,6 @@ export default function ReferralAdmin() {
     <main className="ref-admin">
       <AdminGlobalHeader />
       <aside className="ref-admin-rail">
-        <Link className="ref-admin-brand" to="/">
-          <span>
-            <Link2 />
-          </span>
-          <div>
-            <strong>REFERRAL</strong>
-            <small>管理中心</small>
-          </div>
-        </Link>
         <nav>
           <AdminNavigation currentPath="/" />
         </nav>

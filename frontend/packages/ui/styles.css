@@ -6628,6 +6628,32 @@ body:has(.admin-global-header) .vben-sidebar {
     width: 100%;
     overflow: auto;
   }
+  .vben-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border-top: 1px solid #edf0f5;
+    color: #7b849d;
+    font-size: 10px;
+  }
+  .vben-pagination > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .vben-pagination button {
+    padding: 7px 12px;
+    border: 1px solid #dfe3ed;
+    border-radius: 7px;
+    color: #515b78;
+    background: #fff;
+  }
+  .vben-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
   .vben-table {
     width: 100%;
     min-width: 760px;
@@ -7294,6 +7320,258 @@ body:has(.admin-global-header) .vben-sidebar {
     }
     .admin-nav-section-label {
       display: none;
+    }
+  }
+}
+
+/* Editorial referral totals: one baseline, one divider, no nested cards. */
+@layer components {
+  .invite-summary {
+    width: min(420px, 100%);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 0;
+    padding: 8px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .invite-summary > div {
+    min-width: 0;
+    display: grid;
+    align-content: center;
+    gap: 9px;
+    min-height: 92px;
+    padding: 4px 30px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .invite-summary > div + div {
+    border-left: 1px solid rgba(88, 101, 158, 0.2);
+  }
+
+  .invite-summary strong,
+  .invite-summary small {
+    width: 100%;
+    text-align: left;
+  }
+
+  .invite-summary strong {
+    color: var(--invite-ink);
+    font-family: "Inter Variable", sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(38px, 3.2vw, 48px);
+    font-weight: 720;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+  }
+
+  .invite-summary small {
+    margin: 0;
+    color: #747d99;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  @media (max-width: 480px) {
+    .invite-summary > div {
+      min-height: 78px;
+      padding-inline: 18px;
+    }
+  }
+}
+
+/* Compact history action on narrow user-dashboard headers. */
+@layer components {
+  @media (max-width: 620px) {
+    .referral-history-panel .panel-heading {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) 42px;
+      align-items: start;
+      gap: 11px;
+    }
+
+    .referral-history-panel .panel-heading > div {
+      min-width: 0;
+    }
+
+    .referral-history-panel .panel-heading p {
+      max-width: 30ch;
+    }
+
+    .referral-history-refresh {
+      width: 42px;
+      height: 42px;
+      margin-left: 0;
+      padding: 0;
+      justify-content: center;
+      align-self: start;
+      border-radius: 11px;
+    }
+
+    .referral-history-refresh span {
+      display: none;
+    }
+
+    .referral-history-refresh svg {
+      width: 17px;
+      height: 17px;
+    }
+  }
+}
+
+/* Unified admin information architecture across all console routes. */
+@layer components {
+  .ref-admin {
+    grid-template-columns: 248px minmax(0, 1fr);
+  }
+
+  .ref-admin-rail,
+  .user-admin-rail,
+  .vben-sidebar {
+    border-right-color: #e3e7f1;
+    background: linear-gradient(180deg, #fcfdff 0%, #f8f9fd 100%);
+  }
+
+  .ref-admin-rail nav,
+  .user-admin-rail nav,
+  .vben-sidebar nav {
+    margin-top: 0;
+  }
+
+  .admin-nav-section {
+    gap: 6px;
+  }
+
+  .admin-nav-section + .admin-nav-section {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+
+  .admin-nav-section-label {
+    padding: 0 13px 8px;
+    color: #939bb0;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ref-admin-rail nav .admin-nav-section a,
+  .user-admin-rail nav .admin-nav-section a,
+  .vben-sidebar nav .admin-nav-section a {
+    position: relative;
+    min-height: 46px;
+    gap: 12px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    color: #69728b;
+    font-size: 13px;
+    font-weight: 680;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease,
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .ref-admin-rail nav .admin-nav-section a svg,
+  .user-admin-rail nav .admin-nav-section a svg,
+  .vben-sidebar nav .admin-nav-section a svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  .ref-admin-rail nav .admin-nav-section a:hover,
+  .user-admin-rail nav .admin-nav-section a:hover,
+  .vben-sidebar nav .admin-nav-section a:hover {
+    color: #3348be;
+    border-color: #e0e4f4;
+    background: #f2f4ff;
+    transform: translateX(2px);
+  }
+
+  .ref-admin-rail nav .admin-nav-section a.active,
+  .user-admin-rail nav .admin-nav-section a.active,
+  .vben-sidebar nav .admin-nav-section a.active {
+    color: #3045bd;
+    border-color: #d9def5;
+    background: linear-gradient(100deg, #ecefff, #f5f3ff);
+    box-shadow:
+      inset 3px 0 #5265dc,
+      0 8px 20px rgba(64, 79, 170, 0.08);
+  }
+
+  @media (max-width: 980px) {
+    .ref-admin {
+      grid-template-columns: 1fr;
+    }
+
+    .ref-admin-rail,
+    .user-admin-rail,
+    .vben-sidebar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ref-admin-rail nav,
+    .user-admin-rail nav,
+    .vben-sidebar nav {
+      display: flex;
+      gap: 6px;
+      padding: 3px 2px 5px;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scrollbar-width: none;
+    }
+
+    .ref-admin-rail nav::-webkit-scrollbar,
+    .user-admin-rail nav::-webkit-scrollbar,
+    .vben-sidebar nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .admin-nav-section {
+      display: flex;
+      flex: none;
+      gap: 6px;
+    }
+
+    .admin-nav-section + .admin-nav-section {
+      margin: 0 0 0 4px;
+      padding: 0 0 0 10px;
+      border-top: 0;
+      border-left: 1px solid #e0e4ef;
+    }
+
+    .admin-nav-section-label {
+      display: none;
+    }
+
+    .ref-admin-rail nav .admin-nav-section a,
+    .user-admin-rail nav .admin-nav-section a,
+    .vben-sidebar nav .admin-nav-section a {
+      min-height: 40px;
+      flex: none;
+      padding: 9px 12px;
+      white-space: nowrap;
+      scroll-snap-align: start;
+    }
+
+    .ref-admin-rail nav .admin-nav-section a:hover,
+    .user-admin-rail nav .admin-nav-section a:hover,
+    .vben-sidebar nav .admin-nav-section a:hover {
+      transform: none;
     }
   }
 }

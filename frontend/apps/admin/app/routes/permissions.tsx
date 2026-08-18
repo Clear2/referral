@@ -12,7 +12,6 @@ import {
   FolderTree,
   KeyRound,
   LayoutDashboard,
-  Link2,
   LoaderCircle,
   Menu as MenuIcon,
   RefreshCw,
@@ -24,7 +23,7 @@ import {
   Users,
   X,
 } from "lucide-react"
-import { Link, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import { apiRequest } from "@referral/api"
 import { AdminNavigation } from "../admin-navigation"
 import { AdminGlobalHeader } from "../components/admin-global-header"
@@ -103,6 +102,8 @@ type Editor = {
 } | null
 type Notice = { type: "success" | "error"; text: string } | null
 
+const apiPageSize = 10
+
 const empty: Snapshot = {
   roles: [],
   permissions: [],
@@ -137,6 +138,7 @@ export default function PermissionAdmin() {
   const [query, setQuery] = useState("")
   const [status, setStatus] = useState<"all" | "enabled" | "disabled">("all")
   const [selectedGroup, setSelectedGroup] = useState<number | undefined>()
+  const [apiPage, setAPIPage] = useState(1)
   const [editor, setEditor] = useState<Editor>(null)
   const [notice, setNotice] = useState<Notice>(null)
 
@@ -187,7 +189,9 @@ export default function PermissionAdmin() {
   useEffect(() => {
     setQuery("")
     setStatus("all")
+    setAPIPage(1)
   }, [page])
+  useEffect(() => setAPIPage(1), [query, status])
 
   async function mutate(url: string, init: RequestInit, message: string) {
     setSaving(true)
@@ -248,6 +252,14 @@ export default function PermissionAdmin() {
           .toLowerCase()
           .includes(normalized))
   )
+  const apiTotalPages = Math.max(1, Math.ceil(apis.length / apiPageSize))
+  const visibleAPIs = apis.slice(
+    (apiPage - 1) * apiPageSize,
+    apiPage * apiPageSize
+  )
+  useEffect(() => {
+    if (apiPage > apiTotalPages) setAPIPage(apiTotalPages)
+  }, [apiPage, apiTotalPages])
   const users = data.users.filter(
     (item) =>
       matchesStatus(item.enabled) &&
@@ -292,16 +304,6 @@ export default function PermissionAdmin() {
     <main className="vben-shell">
       <AdminGlobalHeader />
       <aside className="vben-sidebar">
-        <Link className="vben-logo" to="/">
-          <span>
-            <Link2 />
-          </span>
-          <div>
-            <strong>REFERRAL</strong>
-            <small>管理中心</small>
-          </div>
-        </Link>
-        <small className="vben-nav-label">管理导航</small>
         <nav>
           <AdminNavigation currentPath="/permissions" />
         </nav>
@@ -596,7 +598,7 @@ export default function PermissionAdmin() {
                       "操作",
                     ]}
                   >
-                    {apis.map((item) => (
+                    {visibleAPIs.map((item) => (
                       <tr key={item.id}>
                         <td>
                           <strong>{item.name}</strong>
@@ -618,6 +620,12 @@ export default function PermissionAdmin() {
                       </tr>
                     ))}
                   </DataTable>
+                  <Pagination
+                    page={apiPage}
+                    totalPages={apiTotalPages}
+                    total={apis.length}
+                    onChange={setAPIPage}
+                  />
                 </section>
               )}
               {page === "users" && (
@@ -724,6 +732,39 @@ function DataTable({
         <tbody>{children}</tbody>
       </table>
     </div>
+  )
+}
+function Pagination({
+  page,
+  totalPages,
+  total,
+  onChange,
+}: {
+  page: number
+  totalPages: number
+  total: number
+  onChange: (page: number) => void
+}) {
+  return (
+    <footer className="vben-pagination">
+      <span>
+        共 {total} 项，每页 {apiPageSize} 项
+      </span>
+      <div>
+        <button disabled={page <= 1} onClick={() => onChange(page - 1)}>
+          上一页
+        </button>
+        <strong>
+          {page} / {totalPages}
+        </strong>
+        <button
+          disabled={page >= totalPages}
+          onClick={() => onChange(page + 1)}
+        >
+          下一页
+        </button>
+      </div>
+    </footer>
   )
 }
 function Tag({ children }: { children: React.ReactNode }) {

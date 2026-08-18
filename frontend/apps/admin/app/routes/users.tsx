@@ -188,15 +188,6 @@ export function UserAdmin({
     <main className="user-admin-page">
       <AdminGlobalHeader />
       <aside className="user-admin-rail">
-        <Link to="/" className="ref-admin-brand">
-          <span>
-            <Link2 />
-          </span>
-          <div>
-            <strong>REFERRAL</strong>
-            <small>管理中心</small>
-          </div>
-        </Link>
         <nav>
           <AdminNavigation
             currentPath={isAdmin ? "/administrators" : "/users"}
